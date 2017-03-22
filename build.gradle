@@ -1,0 +1,21 @@
+// Apply the java plugin to add support for Java
+apply plugin: 'java'
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+  jcenter() //This prevents issues with transitive dependencies
+  maven {
+    url  'https://jitpack.io'
+  }
+}
+
+// In this section you declare the dependencies for your production and test code
+dependencies {
+    // The production code uses the SLF4J logging API at compile time
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'com.github.austinv11:Discord4j:2.7.0'
+    //compile 'com.github.austinv11:Discord4j:@VERSION@:shaded' //Use this line instead of the one above it if you want a shaded jar (all the Discord4J dependencies bundled into one jar)
+    compile 'com.github.Discord4J-Addons:Commands4J:1.0.2'
+    compile 'com.sedmelluq:lavaplayer:1.2.12'
+    testCompile 'junit:junit:4.12'
+}
