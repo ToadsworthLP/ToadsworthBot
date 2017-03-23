@@ -34,17 +34,20 @@ public class Commander {
 		
 		//Set up all  kinds of commands
 		Commands.setupCommands(client);
-		AudioCommands.loadDJs();
-		AudioCommands.addAudioCommands(client);
-		
+
 		//Download the config file and split it into lines, if it's okay then set up config-based commands
 		botConfig = new ArrayList<String>(Arrays.asList(Utils.getContentFromURL(configURL).split("\\R", -1)));
 		if(botConfig != null){
+			AudioCommands.loadDJs();
 			SimpleCommandMaker.addSimpleCommands(client);
 			AdvancedCommandMaker.addAdvancedCommands(client);
 		}else{
+			AudioCommands.djsActive = false;
 			Commander.LogError("Konnte toadsworthbot.cfg nicht laden!");
 		}
+		
+		//Set up all audio-related commands
+		AudioCommands.addAudioCommands(client);
 		
 		//Add commands to get help and get a command list.
 		UtilCommands.addUtilCommands(client);

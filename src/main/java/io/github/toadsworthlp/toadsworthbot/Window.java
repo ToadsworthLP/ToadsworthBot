@@ -27,7 +27,7 @@ public class Window {
 	public static void showControls(){
 		//Adding Controls
 		TextField txtToken = new TextField();
-		txtToken.setText("Token hier einsetzen");
+		txtToken.setText("Token");
 		txtToken.setMinWidth(300);
 		txtToken.setMaxWidth(300);
 		Add(txtToken);

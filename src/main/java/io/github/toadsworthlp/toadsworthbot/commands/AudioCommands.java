@@ -16,17 +16,34 @@ import io.github.toadsworthlp.toadsworthbot.audio.AudioPlayer;
 
 public class AudioCommands {
 	
-	public static List<String> djnames = new ArrayList<String>();
+	public static List<String> djIds = new ArrayList<String>();
+	public static boolean djsActive = true;
 	
 	public static void loadDJs(){
-		String[] djs = Utils.getContentFromURL("https://toadsworthlp.github.io/Files/djlist.txt", "Toadsworth").split("\\R", -1);
-		if(!djnames.isEmpty()){
-			djnames.clear();
+		if(!djIds.isEmpty()){
+			djIds.clear();
 		}
-		for(int i = 0; i < djs.length; i++){
-			djnames.add(djs[i]);
+		
+		List<String> djfiles = new ArrayList<String>();
+		for(int i = 0; i < Commander.botConfig.size(); i++){
+			if(Commander.botConfig.get(i).endsWith(".dj")){
+				String file = Utils.getContentFromURL(Commander.configURL.replaceAll("toadsworthbot.cfg", "") + Commander.botConfig.get(i).split(";")[1]);
+				djfiles.add(file);
+			}
 		}
+		
+		if(djfiles.size() > 0){
+			for(int i = 0; i < djfiles.size(); i++){
+				String[] ids = djfiles.get(i).split("\\R", -1);
+				for(int j = 0; j < ids.length; j++){
+					djIds.add(ids[j]);
+				}
+			}
 		Commander.LogInfo("DJs registriert.");
+		}else{
+			Commander.LogWarn("Keine DJs eingetragen! DJ-Funktionen deaktiviert.");
+			djsActive = false;
+		}
 	}
 	
 	public static void addAudioCommands(IDiscordClient client){
@@ -35,7 +52,7 @@ public class AudioCommands {
 		        .withDescription("Spielt Musik ab. Verwendung: !play <YouTube Link>")
 		        .onExecuted(context ->
 		            {
-		            	if(djnames.contains(context.getMessage().getAuthor().getName())){
+		            	if(djIds.contains(context.getMessage().getAuthor().getID()) || !djsActive){
 		            		AudioPlayer.loadAndPlay(context.getMessage().getChannel(), context.getArgs()[0]);
 		            	}else{
 		            		Commander.LogWarn(context.getMessage().getAuthor().getName() + " wollte den Track " + context.getArgs()[0] + " abspielen, ist aber kein DJ!");
@@ -53,7 +70,7 @@ public class AudioCommands {
 		        .withDescription("Überspringt den aktuell laufenden Track")
 		        .onExecuted(context ->
 		            {
-		            	if(djnames.contains(context.getMessage().getAuthor().getName())){
+		            	if(djIds.contains(context.getMessage().getAuthor().getID()) || !djsActive){
 		            		AudioPlayer.skipTrack(context.getMessage().getChannel());
 		            	}else{
 		            		Commander.LogWarn(context.getMessage().getAuthor().getName() + " wollte den aktuellen Track überspringen, ist aber kein DJ!");
@@ -71,7 +88,7 @@ public class AudioCommands {
 		        .withDescription("Springt zum zuletzt hinzugefügten Track der Warteschlange.")
 		        .onExecuted(context ->
 		            {
-		            	if(djnames.contains(context.getMessage().getAuthor().getName())){
+		            	if(djIds.contains(context.getMessage().getAuthor().getID()) || !djsActive){
 		            		AudioPlayer.skipToLast(context.getMessage().getChannel());
 		            	}else{
 		            		Commander.LogWarn(context.getMessage().getAuthor().getName() + " wollte zum letzten Track springen, ist aber kein DJ!");
@@ -89,7 +106,7 @@ public class AudioCommands {
 		        .withDescription("Verschiebt den Musikbot in den angegeben Voice-Channel.")
 		        .onExecuted(context ->
 		            {
-		            	if(djnames.contains(context.getMessage().getAuthor().getName())){
+		            	if(djIds.contains(context.getMessage().getAuthor().getID()) || !djsActive){
 		            	AudioPlayer.joinSpecificVoiceChannel(context.getMessage().getGuild().getAudioManager(),context.getMessage().getChannel() ,context.getArgs()[0]);;
 		            	}else{
 		            		Commander.LogWarn(context.getMessage().getAuthor().getName() + " wollte den Bot in den Voice-Channel " + context.getArgs()[0] + " verschieben, ist aber kein DJ!");
@@ -107,7 +124,7 @@ public class AudioCommands {
 		        .withDescription("Aktualisiert die Liste der DJs.")
 		        .onExecuted(context ->
 		            {
-		            	if(djnames.contains(context.getMessage().getAuthor().getName())){
+		            	if(djIds.contains(context.getMessage().getAuthor().getID()) || !djsActive){
 		            		loadDJs();
 		            	}else{
 		            		Commander.LogWarn(context.getMessage().getAuthor().getName() + " wollte den Bot in den Voice-Channel " + context.getArgs()[0] + " verschieben, ist aber kein DJ!");
