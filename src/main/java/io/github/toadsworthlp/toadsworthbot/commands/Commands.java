@@ -14,20 +14,6 @@ public class Commands {
 	//Actual commands
 	public static void setupCommands(IDiscordClient client){
 		
-		Command ping = new Command("ping")
-		        .withDescription("Ping -> Pong! Ein simpler Testcommand.")
-		        .onExecuted(context ->
-		            {
-		            	try {
-							context.getMessage().getChannel().sendMessage("Pong!");
-						} catch (RateLimitException | MissingPermissionsException | DiscordException e) {
-							e.printStackTrace();
-						}
-					}
-		        );
-		CommandRegistry.getRegistryForClient(client).register(ping);
-		
-		
 		Command debug = new Command("debug")
 		        .withDescription("Gibt Debuginformationen aus.")
 		        .onExecuted(context ->
@@ -47,14 +33,14 @@ public class Commands {
 		        );
 		CommandRegistry.getRegistryForClient(client).register(debug);
 		
-		Command reloadCmds = new Command("reloadCmds")
+		Command reloadConfig = new Command("reloadConfig")
 		        .withDescription("Lädt die Befehlliste neu.")
 		        .onExecuted(context ->
 		            {	
-		            	Commander.reloadCommands(client);
+		            	Commander.reloadConfig(client);
 					}
 		        );
-		CommandRegistry.getRegistryForClient(client).register(reloadCmds);
+		CommandRegistry.getRegistryForClient(client).register(reloadConfig);
 
 	}
 

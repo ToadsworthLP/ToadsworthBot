@@ -50,7 +50,7 @@ public class ToadsworthBot extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		//Create the Control Panel window and show it, wait for user to press "Start!"
 		Window window = new Window(primaryStage);
-		window.showControls();
+		window.showControls();		//For some reason this doesn't work statically
 	}
 	
 	//Stopping everything when closing the window

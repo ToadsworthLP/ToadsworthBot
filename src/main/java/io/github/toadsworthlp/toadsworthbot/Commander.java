@@ -54,27 +54,30 @@ public class Commander {
 	}
 	
 	//Mostly the same as setupCommands(), allows for command reload
-	public static void reloadCommands(IDiscordClient client){
+	public static void reloadConfig(IDiscordClient client){
 		CommandRegistry.getRegistryForClient(client).getCommands().clear();
 		botConfig.clear();
 		
 		CommandRegistry.getRegistryForClient(client).getCommands().addAll(defaultCommands);
 
 		Commands.setupCommands(client);
-		AudioCommands.loadDJs();
-		AudioCommands.addAudioCommands(client);
+		
 		
 		botConfig = new ArrayList<String>(Arrays.asList(Utils.getContentFromURL(configURL).split("\\R", -1)));
 		if(botConfig != null){
+			AudioCommands.loadDJs();
 			SimpleCommandMaker.addSimpleCommands(client);
 			AdvancedCommandMaker.addAdvancedCommands(client);
 		}else{
+			AudioCommands.djsActive = false;
 			Commander.LogError("Konnte toadsworthbot.cfg nicht laden!");
 		}
 		
+		AudioCommands.addAudioCommands(client);
+		
 		UtilCommands.addUtilCommands(client);
 		
-		Commander.LogInfo("Commands neu geladen!");
+		Commander.LogInfo("toadsworthbot.cfg neu geladen!");
 	}
 	
 	//Some convenience functions for printing messages into the control panel

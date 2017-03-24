@@ -18,17 +18,23 @@ public class AudioCommands {
 	
 	public static List<String> djIds = new ArrayList<String>();
 	public static boolean djsActive = true;
+	public static int djCount;
 	
 	public static void loadDJs(){
 		if(!djIds.isEmpty()){
 			djIds.clear();
+			djCount = 0;
 		}
 		
 		List<String> djfiles = new ArrayList<String>();
 		for(int i = 0; i < Commander.botConfig.size(); i++){
 			if(Commander.botConfig.get(i).endsWith(".dj")){
-				String file = Utils.getContentFromURL(Commander.configURL.replaceAll("toadsworthbot.cfg", "") + Commander.botConfig.get(i).split(";")[1]);
-				djfiles.add(file);
+				try{
+					String file = Utils.getContentFromURL(Commander.configURL.replaceAll("toadsworthbot.cfg", "") + Commander.botConfig.get(i).split(";")[Commander.botConfig.get(i).split(";").length-1]);
+					djfiles.add(file);
+				}catch(NullPointerException e){
+					Commander.LogError("Fehler beim Laden von " + Commander.botConfig.get(i).split(";")[Commander.botConfig.size()-1]);
+				}
 			}
 		}
 		
@@ -36,12 +42,20 @@ public class AudioCommands {
 			for(int i = 0; i < djfiles.size(); i++){
 				String[] ids = djfiles.get(i).split("\\R", -1);
 				for(int j = 0; j < ids.length; j++){
-					djIds.add(ids[j]);
+					if(ids[j].length() == 18){
+						djIds.add(ids[j]);
+						djCount++;
+					}else{
+						Commander.LogError("Ungültige UserID: " + ids[j]);
+					}
 				}
 			}
-		Commander.LogInfo("DJs registriert.");
+		}
+		
+		if(djCount > 0){
+			Commander.LogInfo(djCount + " DJ(s) registriert.");
 		}else{
-			Commander.LogWarn("Keine DJs eingetragen! DJ-Funktionen deaktiviert.");
+			Commander.LogWarn("Keine DJs registriert! DJ-Funktionen deaktiviert.");
 			djsActive = false;
 		}
 	}
