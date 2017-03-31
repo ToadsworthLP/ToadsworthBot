@@ -19,7 +19,7 @@ import sx.blah.discord.util.RateLimitException;
 public class AdvancedCommandMaker {
 	
 	//Mostly the same as SimpleCommandMaker.addSimpleCommands
-	public static void addAdvancedCommands(IDiscordClient client){
+	public static void addCommands(IDiscordClient client){
 		int loaded = 0;
 		List<String> lines = Commander.botConfig;
 		for(int i = 0; i < lines.size(); i++){

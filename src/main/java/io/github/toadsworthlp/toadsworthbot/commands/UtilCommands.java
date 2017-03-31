@@ -13,7 +13,7 @@ import sx.blah.discord.util.RateLimitException;
 public class UtilCommands {
 	
 	//List and Help
-	public static void addUtilCommands(IDiscordClient client){
+	public static void addCommands(IDiscordClient client){
 		
 		Command liste = new Command("liste")
 		        .withDescription("Listet alle verfügbaren Commands auf.")

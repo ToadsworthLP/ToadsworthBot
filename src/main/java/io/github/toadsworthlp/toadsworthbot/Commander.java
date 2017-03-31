@@ -10,7 +10,7 @@ import com.darichey.discord.api.CommandRegistry;
 
 import io.github.toadsworthlp.toadsworthbot.commands.AdvancedCommandMaker;
 import io.github.toadsworthlp.toadsworthbot.commands.AudioCommands;
-import io.github.toadsworthlp.toadsworthbot.commands.Commands;
+import io.github.toadsworthlp.toadsworthbot.commands.CoreCommands;
 import io.github.toadsworthlp.toadsworthbot.commands.SimpleCommandMaker;
 import io.github.toadsworthlp.toadsworthbot.commands.UtilCommands;
 import sx.blah.discord.api.IDiscordClient;
@@ -33,24 +33,25 @@ public class Commander {
 		defaultCommands = CommandRegistry.getRegistryForClient(client).getCommands(); //This is used to initialize the command registry when reloading it
 		
 		//Set up all  kinds of commands
-		Commands.setupCommands(client);
+		CoreCommands.addCommands(client);
 
 		//Download the config file and split it into lines, if it's okay then set up config-based commands
 		botConfig = new ArrayList<String>(Arrays.asList(Utils.getContentFromURL(configURL).split("\\R", -1)));
 		if(botConfig != null){
 			AudioCommands.loadDJs();
+			AudioCommands.djsActive = true;
 			SimpleCommandMaker.addSimpleCommands(client);
-			AdvancedCommandMaker.addAdvancedCommands(client);
+			AdvancedCommandMaker.addCommands(client);
 		}else{
 			AudioCommands.djsActive = false;
 			Commander.LogError("Konnte toadsworthbot.cfg nicht laden!");
 		}
 		
 		//Set up all audio-related commands
-		AudioCommands.addAudioCommands(client);
+		AudioCommands.addCommands(client);
 		
 		//Add commands to get help and get a command list.
-		UtilCommands.addUtilCommands(client);
+		UtilCommands.addCommands(client);
 	}
 	
 	//Mostly the same as setupCommands(), allows for command reload
@@ -60,22 +61,23 @@ public class Commander {
 		
 		CommandRegistry.getRegistryForClient(client).getCommands().addAll(defaultCommands);
 
-		Commands.setupCommands(client);
+		CoreCommands.addCommands(client);
 		
 		
 		botConfig = new ArrayList<String>(Arrays.asList(Utils.getContentFromURL(configURL).split("\\R", -1)));
 		if(botConfig != null){
 			AudioCommands.loadDJs();
+			AudioCommands.djsActive = true;
 			SimpleCommandMaker.addSimpleCommands(client);
-			AdvancedCommandMaker.addAdvancedCommands(client);
+			AdvancedCommandMaker.addCommands(client);
 		}else{
 			AudioCommands.djsActive = false;
 			Commander.LogError("Konnte toadsworthbot.cfg nicht laden!");
 		}
 		
-		AudioCommands.addAudioCommands(client);
+		AudioCommands.addCommands(client);
 		
-		UtilCommands.addUtilCommands(client);
+		UtilCommands.addCommands(client);
 		
 		Commander.LogInfo("toadsworthbot.cfg neu geladen!");
 	}

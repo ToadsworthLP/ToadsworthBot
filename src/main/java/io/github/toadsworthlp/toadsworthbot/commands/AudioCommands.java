@@ -54,13 +54,14 @@ public class AudioCommands {
 		
 		if(djCount > 0){
 			Commander.LogInfo(djCount + " DJ(s) registriert.");
+			djsActive = true;
 		}else{
 			Commander.LogWarn("Keine DJs registriert! DJ-Funktionen deaktiviert.");
 			djsActive = false;
 		}
 	}
 	
-	public static void addAudioCommands(IDiscordClient client){
+	public static void addCommands(IDiscordClient client){
 		
 		Command play = new Command("play")
 		        .withDescription("Spielt Musik ab. Verwendung: !play <YouTube Link>")

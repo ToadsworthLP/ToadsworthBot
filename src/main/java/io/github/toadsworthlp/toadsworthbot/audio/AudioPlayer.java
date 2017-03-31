@@ -20,10 +20,10 @@ import sx.blah.discord.handle.obj.IVoiceChannel;
 import sx.blah.discord.util.MissingPermissionsException;
 
 public class AudioPlayer {
-	
+
 	private static AudioPlayerManager playerManager;
 	private static Map<Long, GuildMusicManager> musicManagers;
-	
+
 	public static void setupAudio(IDiscordClient client){
 		client.getDispatcher().registerListener(new AudioPlayer());
 	}
@@ -52,7 +52,7 @@ public class AudioPlayer {
 
 	public static void loadAndPlay(final IChannel channel, final String trackUrl) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
-		
+
 		musicManager.player.setVolume(10);
 
 		playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -60,7 +60,7 @@ public class AudioPlayer {
 			public void trackLoaded(AudioTrack track) {
 				sendMessageToChannel(channel, "Zur Warteschlange hinzugefügt: " + track.getInfo().title);
 				Commander.LogInfo("Zur Warteschlange hinzugefügt: " + track.getInfo().title);
-				
+
 				play(channel.getGuild(), musicManager, track);
 			}
 
@@ -104,18 +104,18 @@ public class AudioPlayer {
 
 		sendMessageToChannel(channel, "Track übersprungen.");
 	}
-	
+
 	public static void skipToLast(IChannel channel) {
 		GuildMusicManager musicManager = getGuildAudioPlayer(channel.getGuild());
 		int queueLength = musicManager.scheduler.getQueueLength();
-		
+
 		for(int i = 0; i < queueLength; i++){
 			musicManager.scheduler.nextTrack();
 		}
 
 		sendMessageToChannel(channel, "Zum letzten Track gesprungen.");
 	}
-	
+
 	public static void joinSpecificVoiceChannel(IAudioManager audioManager,IChannel channel , String name){
 		if(audioManager.getGuild().getVoiceChannelsByName(name).size() > 0){
 			for (IVoiceChannel voiceChannel : audioManager.getGuild().getVoiceChannelsByName(name)) {
